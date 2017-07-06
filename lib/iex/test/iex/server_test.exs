@@ -24,7 +24,7 @@ defmodule IEx.ServerTest do
       server = self()
       boot([], fn ->
         opts = [prefix: "dbg", binding: [a: 1, b: 2]]
-        IEx.Server.take_over("iex:13", opts, 1000, server)
+        IEx.Server.take_over("iex:13", opts, server)
       end)
     end) =~ "dbg(1)> "
   end
@@ -36,7 +36,7 @@ defmodule IEx.ServerTest do
   end
 
   test "take over fails when there is no shell" do
-    assert IEx.Server.take_over("iex:13", [], 10) == {:error, :no_iex}
+    assert IEx.Server.take_over("iex:13", []) == {:error, :no_iex}
   end
 
   test "pry wraps around take over" do

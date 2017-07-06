@@ -483,10 +483,10 @@ defmodule IEx do
 
   You can invoke this function directly when you are not able to invoke
   `IEx.pry/1` as a macro. This function expects the binding (from
-  `Kernel.binding/0`), the environment (from `__ENV__/0`) and the timeout
-  (a sensible default is 5000).
+  `Kernel.binding/0`), the environment (from `__ENV__/0`) and a timeout
+  used when locating the IEx server (a sensible default is 5000).
   """
-  def pry(binding, env, timeout) do
+  def pry(binding, env, _timeout \\ 5000) do
     opts = [binding: binding, dot_iex_path: "", env: env, prefix: "pry"]
     meta = "#{inspect self()} at #{Path.relative_to_cwd(env.file)}:#{env.line}"
     desc =
@@ -496,7 +496,7 @@ defmodule IEx do
         ""
       end
 
-    res = IEx.Server.take_over("Request to pry #{meta}#{desc}", opts, timeout)
+    res = IEx.Server.take_over("Request to pry #{meta}#{desc}", opts)
 
     # We cannot use colors because IEx may be off.
     case res do
